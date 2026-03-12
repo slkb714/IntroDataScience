@@ -4,7 +4,7 @@
 
 ---
 
-## What Even Is Git?
+## What Even Is Git?git status
 
 Git is a free, open-source, distributed version control system (VCS) designed to manage changes to files or source code during software development. It allows multiple developers to work collaboratively on the same project without overwriting each other's work, tracking every changes made, and enabling users to revert to previous versions if needed.
 
