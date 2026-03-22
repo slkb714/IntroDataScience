@@ -1,14 +1,14 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo",
+#     "marimo>=0.20.2",
 #     "pyzmq",
 # ]
 # ///
 
 import marimo
 
-__generated_with = "0.19.6"
+__generated_with = "0.20.4"
 app = marimo.App(width="medium")
 
 
@@ -59,6 +59,19 @@ def _():
     return
 
 
+@app.cell
+def _():
+    name = "emmanuel"
+    age = 25
+    height = 6.75
+    is_student = True
+    print(f"Name: {name}")
+    print(f"Age: {age}")
+    print(f"Height: {height}m")
+    print(f"Student: {is_student}")
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -87,6 +100,20 @@ def _():
     return
 
 
+@app.cell
+def _():
+
+    sum_result: [8] = 5 +3
+    product = 2*4
+    divison =20/5
+    power =3**2
+    print(f"Sum: {sum_result}")
+    print(f"Product: {product}") 
+    print(f"Division: {divison}")
+    print(f"Power: {power}")                           
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -111,6 +138,15 @@ def _():
 
     # TODO: Print the length of the list
     print(f"Number of foods: ???")  # Fix this line
+    return
+
+
+@app.cell
+def _():
+    favorite_foods = ["rice", "beans" ,"soup", "meat", "fish", "yam","noodles"]
+    print(f"first food: {favorite_foods[0]}")
+    print(f"last food: {favorite_foods[6]}")
+    favorite_foods.append("rice")
     return
 
 
@@ -146,6 +182,21 @@ def _():
     return
 
 
+@app.cell
+def _():
+    book = {
+        "title": "The RECORD OF RANGNOK THE VIKING",
+        "author": "F. EMMANUEL EZENWEKWE",
+        "year": 1925,
+        "pages": 218
+    }
+    print(f"Title: {book['title']}")
+    print(f"Author: {book['author']}")
+    print(f"Year: {book['year']}")
+    print(f"Pages: {book['pages']}")
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -168,6 +219,20 @@ def _():
     return
 
 
+@app.cell
+def _():
+    temperature = 25
+    if temperature > 30:
+        print("It's hot!")
+    elif temperature > 20:
+        print("It's warm")
+    elif temperature > 10:
+        print("It's cool")
+    else:
+        print("It's cold!")
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -187,11 +252,25 @@ def _():
 
 @app.cell
 def _():
+    numbers = [6, 8, 10, 12, 14]
+    print(f"numbers multiplied by 3: {[num * 3 for num in numbers]}")
+    return
+
+
+@app.cell
+def _():
     # TODO: Use a for loop to calculate the sum of all numbers from 1 to 100
     total = 0
 
     # Write your loop here
 
+    print(f"Sum of 1 to 100: {total}")
+    return
+
+
+@app.cell
+def _():
+    total = 1
     print(f"Sum of 1 to 100: {total}")
     return
 
@@ -218,6 +297,13 @@ def _():
 
 @app.cell
 def _():
+    squares = [num**2 for num in range(1, 11)]
+    print(f"Squares: {squares}")
+    return
+
+
+@app.cell
+def _():
     # TODO: Create a list of only even numbers from this list
     # Use a list comprehension with a condition!
 
@@ -226,6 +312,14 @@ def _():
 
     print(f"Even numbers: {even_numbers}")
     # Expected: [2, 4, 6, 8, 10, 12]
+    return
+
+
+@app.cell
+def _():
+    all_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    even_numbers = [num for num in all_numbers if num % 2 == 0]
+    print(f"Even numbers: {all_numbers}")
     return
 
 
@@ -248,6 +342,15 @@ def _():
     # Test your function
     print(greet("Alice"))
     print(greet("Bob"))
+    return
+
+
+@app.cell
+def _():
+    def greet(name):
+        return f"Hello, {name}!"
+    print(greet("emanuel"))
+    print(greet("james")) 
     return
 
 
@@ -274,6 +377,17 @@ def _():
 
     print(f"Area 1: {area1}")  # Should be 50
     print(f"Area 2: {area2}")  # Should be 21
+    return
+
+
+@app.cell
+def _():
+    def calculate_area(width, height):
+        return width * height   
+    area1 = calculate_area(550, 1010)
+    area2 = calculate_area(700, 3303)    
+    print(f"Area 1: {area1}")  
+    print(f"Area 2: {area2}")  
     return
 
 
@@ -317,6 +431,26 @@ def _():
     return
 
 
+@app.cell
+def _():
+    def analyze_numbers(numbers):
+        count = len(numbers)
+        total_sum = sum(numbers)
+        average = total_sum / count if count > 0 else 0
+        result = {
+            "count": count,
+            "sum": total_sum,
+            "average": average
+        }
+        return result
+    test_numbers = [10, 20, 30, 40, 50]
+    analysis = analyze_numbers(test_numbers)
+    print("Analysis of [10, 20, 30, 40, 50]:")
+    for key, value in analysis.items():
+        print(f"  {key}: {value}")
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -339,6 +473,7 @@ def _(mo):
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 
