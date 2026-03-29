@@ -1,6 +1,16 @@
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#     "marimo>=0.20.2",
+#     "plotly>=6.6.0",
+#     "polars>=1.39.3",
+#     "pyzmq>=27.1.0",
+# ]
+# ///
+
 import marimo
 
-__generated_with = "0.19.6"
+__generated_with = "0.20.4"
 app = marimo.App(width="medium")
 
 
@@ -34,7 +44,8 @@ def _():
     import plotly.graph_objects as go
     from datetime import datetime
     import marimo as mo
-    return (mo,)
+
+    return mo, pl
 
 
 @app.cell(hide_code=True)
@@ -57,6 +68,15 @@ def _():
 
 
 @app.cell
+def _(pl):
+
+    students = pl.read_csv("../data/raw/students.csv")
+    df = pl.DataFrame(students)
+    print(df.head())
+    return (df,)
+
+
+@app.cell
 def _():
     # TODO: Display basic information about the students dataset
     # - How many rows and columns?
@@ -64,6 +84,15 @@ def _():
     # - What are the data types?
 
     # Hint: Use students.shape, students.columns, students.dtypes, or students.describe()
+    return
+
+
+@app.cell
+def _(df):
+    print(df.shape)
+    print(df.columns)
+    print(df.dtypes)
+    print(df.describe())
     return
 
 
@@ -86,10 +115,24 @@ def _():
 
 
 @app.cell
+def _(df, pl):
+    high_scorers = df.filter(pl.col("test_score") > 85)
+    print(f"Number of high scorers: {len(high_scorers)}")
+    return
+
+
+@app.cell
 def _():
     # TODO: Filter to find students in grade_level 10 with attendance_rate > 90%
 
     grade_10_good_attendance = None  # Use multiple conditions with &
+    return
+
+
+@app.cell
+def _(df, pl):
+    grade_10_good_attendance = df.filter((pl.col("grade_level") == 10) & (pl.col("attendance_rate") > 90))
+    print(f"Number of grade 10 students with good attendance: {len(grade_10_good_attendance)}")
     return
 
 
@@ -110,6 +153,13 @@ def _():
 
 
 @app.cell
+def _(df):
+    subset = df.select(["name", "grade_level", "test_score"])
+    print(subset.head())
+    return
+
+
+@app.cell
 def _():
     # TODO: Create a new column "performance_category" that categorizes students:
     # - "Excellent" if test_score >= 90
@@ -120,6 +170,22 @@ def _():
     # Hint: Use pl.when().then().otherwise() chains
 
     students_categorized = None
+    return
+
+
+@app.cell
+def _(df, pl):
+    fd = df.with_columns(
+        pl.when(pl.col("test_score").is_null())
+          .then(None)
+        .when(pl.col("test_score") >= 90)
+          .then(pl.lit("Excellent"))
+        .when(pl.col("test_score") >= 75)
+          .then(pl.lit("Good"))
+         .otherwise(pl.lit("Needs Improvement"))
+        .alias("performance_category")
+    )
+    print(fd.head)
     return
 
 
@@ -137,13 +203,29 @@ def _():
     # The file is at: ../data/raw/sales.json
 
     sales = None  # Replace with pl.read_json(...)
-    return
+    return (sales,)
+
+
+@app.cell
+def _(pl):
+    sales = pl.read_json("../data/raw/sales.json")
+    print(sales.head())
+    return (sales,)
 
 
 @app.cell
 def _():
     # TODO: Display basic info about the sales dataset
     # How many transactions? What's the date range?
+    return
+
+
+@app.cell
+def _(sales):
+    num_transactions = sales.height
+    print(f"Number of transactions: {num_transactions}")
+    date_range = (sales["date"].min(), sales["date"].max())
+    print(f"Date range: {date_range[0]} to {date_range[1]}")
     return
 
 
@@ -165,11 +247,37 @@ def _():
 
 
 @app.cell
+def _(pl, sales):
+    month = sales.with_columns(
+        # 
+        pl.col("date").str.to_date("%Y-%m-%d"),
+
+        pl.col("date").str.to_date("%Y-%m-%d").dt.month().alias("month")
+    )
+    print(month.head())
+
+    return (month,)
+
+
+@app.cell
 def _():
     # TODO: Calculate total sales by month
     # Show which month had the highest revenue
 
     monthly_sales = None
+    return
+
+
+@app.cell
+def _(month, pl):
+    monthly_sales = (
+        month.group_by("month")
+        .agg(pl.col("total_amount").sum().alias("total_sales"))
+        .sort("month")
+    )
+    print(monthly_sales)    
+    highest_month = monthly_sales.sort("total_sales", descending=True).head(1)
+    print(highest_month)
     return
 
 
