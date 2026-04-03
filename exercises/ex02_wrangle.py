@@ -57,42 +57,32 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(pl):
     # TODO: Load the students.csv file using Polars
     # The file is at: ../data/raw/students.csv
-
-    students = None  # Replace with pl.read_csv(...)
-
-    # TODO: Display the first 10 rows
-    return
-
-
-@app.cell
-def _(pl):
 
     students = pl.read_csv("../data/raw/students.csv")
     df = pl.DataFrame(students)
     print(df.head())
+
+    # TODO: Display the first 10 rows
+    print(df.head(10))
+
     return (df,)
 
 
 @app.cell
-def _():
+def _(df):
     # TODO: Display basic information about the students dataset
     # - How many rows and columns?
     # - What are the column names?
     # - What are the data types?
-
-    # Hint: Use students.shape, students.columns, students.dtypes, or students.describe()
-    return
-
-
-@app.cell
-def _(df):
     print(df.shape)
     print(df.columns)
     print(df.dtypes)
     print(df.describe())
+
+    # Hint: Use students.shape, students.columns, students.dtypes, or students.describe()
     return
 
 
@@ -105,8 +95,10 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(df, pl):
     # TODO: Filter to find students who scored above 85 on their test
+    high_scorers = df.filter(pl.col("test_score") > 85)
+    print(f"Number of high scorers: {len(high_scorers)}")
 
     high_scorers = None  # Use students.filter(...)
 
@@ -116,23 +108,10 @@ def _():
 
 @app.cell
 def _(df, pl):
-    high_scorers = df.filter(pl.col("test_score") > 85)
-    print(f"Number of high scorers: {len(high_scorers)}")
-    return
-
-
-@app.cell
-def _():
     # TODO: Filter to find students in grade_level 10 with attendance_rate > 90%
-
-    grade_10_good_attendance = None  # Use multiple conditions with &
-    return
-
-
-@app.cell
-def _(df, pl):
     grade_10_good_attendance = df.filter((pl.col("grade_level") == 10) & (pl.col("attendance_rate") > 90))
     print(f"Number of grade 10 students with good attendance: {len(grade_10_good_attendance)}")
+
     return
 
 
@@ -145,22 +124,16 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(df):
     # TODO: Select only the name, grade_level, and test_score columns
 
-    subset = None  # Use students.select(...)
-    return
-
-
-@app.cell
-def _(df):
     subset = df.select(["name", "grade_level", "test_score"])
     print(subset.head())
     return
 
 
 @app.cell
-def _():
+def _(df, pl):
     # TODO: Create a new column "performance_category" that categorizes students:
     # - "Excellent" if test_score >= 90
     # - "Good" if test_score >= 75
@@ -169,12 +142,6 @@ def _():
 
     # Hint: Use pl.when().then().otherwise() chains
 
-    students_categorized = None
-    return
-
-
-@app.cell
-def _(df, pl):
     fd = df.with_columns(
         pl.when(pl.col("test_score").is_null())
           .then(None)
@@ -198,30 +165,19 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(pl):
     # TODO: Load the sales.json file
     # The file is at: ../data/raw/sales.json
 
-    sales = None  # Replace with pl.read_json(...)
-    return (sales,)
-
-
-@app.cell
-def _(pl):
     sales = pl.read_json("../data/raw/sales.json")
     print(sales.head())
     return (sales,)
 
 
 @app.cell
-def _():
+def _(sales):
     # TODO: Display basic info about the sales dataset
     # How many transactions? What's the date range?
-    return
-
-
-@app.cell
-def _(sales):
     num_transactions = sales.height
     print(f"Number of transactions: {num_transactions}")
     date_range = (sales["date"].min(), sales["date"].max())
@@ -238,16 +194,9 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(pl, sales):
     # TODO: Convert the date column to datetime type
     # Then extract the month and create a new column "month"
-
-    sales_with_month = None  # Use with_columns() and pl.col().str.to_date()
-    return
-
-
-@app.cell
-def _(pl, sales):
     month = sales.with_columns(
         # 
         pl.col("date").str.to_date("%Y-%m-%d"),
@@ -255,21 +204,13 @@ def _(pl, sales):
         pl.col("date").str.to_date("%Y-%m-%d").dt.month().alias("month")
     )
     print(month.head())
-
     return (month,)
 
 
 @app.cell
-def _():
+def _(month, pl):
     # TODO: Calculate total sales by month
     # Show which month had the highest revenue
-
-    monthly_sales = None
-    return
-
-
-@app.cell
-def _(month, pl):
     monthly_sales = (
         month.group_by("month")
         .agg(pl.col("total_amount").sum().alias("total_sales"))
@@ -278,6 +219,11 @@ def _(month, pl):
     print(monthly_sales)    
     highest_month = monthly_sales.sort("total_sales", descending=True).head(1)
     print(highest_month)
+    return
+
+
+@app.cell
+def _():
     return
 
 
