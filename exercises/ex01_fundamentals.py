@@ -52,15 +52,6 @@ def _():
     is_student = False  # Change if needed
 
     # Print them out
-    print(f"Name: {name}")
-    print(f"Age: {age}")
-    print(f"Height: {height}m")
-    print(f"Student: {is_student}")
-    return
-
-
-@app.cell
-def _():
     name = "emmanuel"
     age = 25
     height = 6.75
@@ -81,17 +72,14 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(sum_result: [8]):
     # TODO: Calculate the following:
-    # 1. Sum of 45 and 67
-    # 2. Product of 12 and 8
-    # 3. 100 divided by 7 (keep decimals)
-    # 4. 2 to the power of 10
 
-    sum_result = 0  # TODO
-    product = 0  # TODO
-    division = 0  # TODO
-    power = 0  # TODO
+
+    sum_result [8] = 4 + 4 # TODO
+    product = 4 *4# TODO
+    division = 100/7  # TODO
+    power = 2**3 # TODO
 
     print(f"Sum: {sum_result}")
     print(f"Product: {product}")
@@ -110,8 +98,8 @@ def _():
     print(f"Sum: {sum_result}")
     print(f"Product: {product}") 
     print(f"Division: {divison}")
-    print(f"Power: {power}")                           
-    return
+    print(f"Power: {power}")                
+    return (sum_result,)
 
 
 @app.cell(hide_code=True)
@@ -216,12 +204,12 @@ def _():
     temperature = 25  # Try changing this value
 
     # Write your if/elif/else statements here
-    return
+    return (temperature,)
 
 
 @app.cell
-def _():
-    temperature = 25
+def _(temperature):
+    temp = 25
     if temperature > 30:
         print("It's hot!")
     elif temperature > 20:
